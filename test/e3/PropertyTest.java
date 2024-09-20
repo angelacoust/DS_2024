@@ -1,30 +1,71 @@
-import java.util.Objects;
+package e3;
 
-public record Property(PropertyType propertyType, String cadastralNumber, String address, String postalCode,
-                       int squareMeters, int rooms, int bathrooms) {
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.Test;
 
-    // Sobrescribimos equals para definir la igualdad según el número de catastro
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Property property = (Property) o;
-        return cadastralNumber.equals(property.cadastralNumber);
+import static org.junit.jupiter.api.Assertions.*;
+
+class PropertyTest {
+
+    private static Property p1, p2, p3;
+
+    @BeforeAll
+    static void setUp() {
+
+        p1 = new Property(PropertyType.APARTMENT,
+                "01234567890123456789",
+                "Aurelio Aguirre Galarraga 100, 1-A, A Coruna",
+                "15190",
+                80,
+                2,
+                1
+                );
+
+        p2 = new Property(PropertyType.APARTMENT,
+                "56789012345678901234",
+                "Aurelio Aguirre Galarraga 202, 5-D, A Coruna",
+                "15190",
+                100,
+                3,
+                2
+                );
+
+        /* Same cadaster as h2 but the entered address and meters are different. */
+        p3 = new Property(PropertyType.APARTMENT,
+                "56789012345678901234",
+                "Aurelio Aguirre Galarraga 202, 5º D (A Coruna)",
+                "15190",
+                95,
+                3,
+                2
+                );
     }
 
-    // Sobrescribimos hashCode para mantener consistencia con equals
-    @Override
-    public int hashCode() {
-        return Objects.hash(cadastralNumber);
+    /* Equality is defined by the cadaster. */
+
+    @Test
+    void testEquals() {
+        assertEquals(p2, p3);
+        assertNotEquals(p1, null);
+        assertNotEquals(p1, p2);
+        assertNotEquals(p1, p3);
     }
 
-    // Sobrescribimos toString para que se ajuste al formato especificado en el test
-    @Override
-    public String toString() {
-        return propertyType + "\n" +
-                cadastralNumber + "\n" +
-                address + "\n" +
-                postalCode + "\n" +
-                squareMeters + " meters, " + rooms + " rooms, " + bathrooms + " bathrooms";
+    @Test
+    void testHashCode() {
+        assertEquals(p2.hashCode(), p3.hashCode());
+    }
+
+    @Test
+    void testToString() {
+        String expected = """
+                APARTMENT
+                01234567890123456789
+                Aurelio Aguirre Galarraga 100, 1-A, A Coruna
+                15190
+                80 meters, 2 rooms, 1 bathrooms
+                """;
+        String actual = p1.toString();
+        assertEquals(expected, actual);
     }
 }
