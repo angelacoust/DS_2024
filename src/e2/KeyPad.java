@@ -1,4 +1,6 @@
 package e2;
+import java.util.Arrays;
+import java.util.HashSet;
 
 public class KeyPad {
     private char[][] matriz;
@@ -11,6 +13,9 @@ public class KeyPad {
         this.columnas = matriz[0].length;
     }
 
+
+
+
     public static boolean isValidKeyPad(char[][] matriz) {
         // Verificar si la matriz es null
         if (matriz == null) return false;
@@ -18,17 +23,60 @@ public class KeyPad {
         // Verificar si la matriz es vacía o tiene filas vacías
         if (matriz.length == 0 || matriz[0].length == 0) return false;
 
-        // Verificar que todas las filas tengan la misma longitud
+        int numFilas = matriz.length;
         int numColumnas = matriz[0].length;
+
+        // Verificar que todas las filas tengan la misma longitud
         for (char[] fila : matriz) {
             if (fila == null || fila.length != numColumnas) return false;
-            for (char c : fila) {
+        }
+
+        boolean filasOrdenadas = true;
+        boolean columnasOrdenadas = true;
+
+        // Verificar que los caracteres de cada fila estén en orden ascendente
+        for (int i = 0; i < numFilas; i++) {
+            for (int j = 1; j < numColumnas; j++) {
                 // Verificar que cada carácter sea un dígito o una letra
-                if (!Character.isDigit(c) && !Character.isLetter(c)) return false;
+                if (!Character.isDigit(matriz[i][j]) && !Character.isLetter(matriz[i][j])) return false;
+
+                // Verificar si las filas están ordenadas
+                if (matriz[i][j] <= matriz[i][j - 1]) {
+                    filasOrdenadas = false;
+                }
             }
         }
-        return true;
+
+        // Verificar que los caracteres de cada columna estén en orden ascendente
+        for (int j = 0; j < numColumnas; j++) {
+            for (int i = 1; i < numFilas; i++) {
+                // Verificar si las columnas están ordenadas
+                if (matriz[i][j] <= matriz[i - 1][j]) {
+                    columnasOrdenadas = false;
+                }
+            }
+        }
+
+        // Verificar si hay duplicados
+        char[] allChars = new char[numFilas * numColumnas];
+        int index = 0;
+        for (int i = 0; i < numFilas; i++) {
+            for (int j = 0; j < numColumnas; j++) {
+                allChars[index++] = matriz[i][j];
+            }
+        }
+
+        // Ordenar el array para verificar duplicados
+        Arrays.sort(allChars);
+        for (int i = 1; i < allChars.length; i++) {
+            if (allChars[i] == allChars[i - 1]) return false; // Duplicado encontrado
+        }
+
+        // Retornar true si las filas o las columnas están ordenadas
+        return filasOrdenadas || columnasOrdenadas;
     }
+
+
 
     public static boolean areValidMovements(String[] movimientos) {
         if (movimientos == null) return false;
