@@ -3,9 +3,9 @@ package e3;
 import java.util.Objects;
 
 public class Ad {
-    private String agency;
-    private Property property;
-    private AdType adType;
+    private final String agency;
+    private final Property property;
+    private final AdType adType;
     private double priceInEuros;
 
     // Constructor

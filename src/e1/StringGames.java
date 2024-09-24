@@ -3,8 +3,8 @@ package e1;
 public class StringGames {
 
     public static String bestCharacters(String str1, String str2) {
-        int str1Minuscula = 0, str1Mayuscula = 0, str1Digito = 0;
-        int str2minuscula = 0, str2Mayuscula = 0, str2Digito = 0;
+        int str1Minus = 0, str1High = 0, str1Digito = 0;
+        int str2Minus = 0, str2High = 0, str2Digito = 0;
 
         if (str1.length() != str2.length()) {
             throw new IllegalArgumentException("Los strings deben tener la misma longitud.");
@@ -15,33 +15,33 @@ public class StringGames {
             char c2 = str2.charAt(i);
 
             // Contar minúsculas, mayúsculas y dígitos en cada string
-            // string 1
-            if (Character.isLowerCase(c1)) str1Minuscula++;
-            if (Character.isUpperCase(c1)) str1Mayuscula++;
+            // 1
+            if (Character.isLowerCase(c1)) str1Minus++;
+            if (Character.isUpperCase(c1)) str1High++;
             if (Character.isDigit(c1)) str1Digito++;
 
-            // string 2
-            if (Character.isLowerCase(c2)) str2minuscula++;
-            if (Character.isUpperCase(c2)) str2Mayuscula++;
+            // 2
+            if (Character.isLowerCase(c2)) str2Minus++;
+            if (Character.isUpperCase(c2)) str2High++;
             if (Character.isDigit(c2)) str2Digito++;
         }
 
-        // Contamos las categorias
-        int str1Wins = 0, str2Wins = 0;
+        // Contamos las categorías
+        int str1Ganador = 0, str2Ganador = 0;
 
-        if (str1Minuscula > str2minuscula) str1Wins++; else if (str1Minuscula < str2minuscula) str2Wins++;
-        if (str1Mayuscula > str2Mayuscula) str1Wins++; else if (str1Mayuscula < str2Mayuscula) str2Wins++;
-        if (str1Digito > str2Digito) str1Wins++; else if (str1Digito < str2Digito) str2Wins++;
+        if (str1Minus > str2Minus) str1Ganador++; else if (str1Minus < str2Minus) str2Ganador++;
+        if (str1High > str2High) str1Ganador++; else if (str1High < str2High) str2Ganador++;
+        if (str1Digito > str2Digito) str1Ganador++; else if (str1Digito < str2Digito) str2Ganador++;
 
         // Devolver el string que gana
-        if (str1Wins > str2Wins) return str1;
-        if (str2Wins > str1Wins) return str2;
+        if (str1Ganador > str2Ganador) return str1;
+        if (str2Ganador > str1Ganador) return str2;
         return str1; // En caso de empate
     }
 
 
     public static int crossingWords(String str1, String str2) {
-        int count = 0;
+        int contador = 0;
 
         // Recorremos los Strings buscando coincidencias
         for (int i = 0; i < str1.length(); i++) {
@@ -49,11 +49,11 @@ public class StringGames {
             for (int j = 0; j < str2.length(); j++) {
                 char c2 = str2.charAt(j);
                 if (c1 == c2) {
-                    count++;
+                    contador++;
                 }
             }
         }
-        return count;
+        return contador;
     }
 
 
@@ -61,22 +61,22 @@ public class StringGames {
 
     public static String wackyAlphabet(String str1, String str2) {
         // Verificar que str2 contiene exactamente todas las letras del alfabeto
-        boolean[] alphabet = new boolean[26]; // Para verificar cada letra del alfabeto
+        boolean[] alfabeto = new boolean[26]; // Para verificar cada letra del alfabeto
         int uniqueLetters = 0; // Para contar cuántas letras únicas hemos encontrado
 
         // Recorrer str2
         for (int i = 0; i < str2.length(); i++) {
-            char current = str2.charAt(i);
+            char iterator = str2.charAt(i);
 
             // Asegurarse de que es una letra en minúscula
-            if (current < 'a' || current > 'z') {
+            if (iterator < 'a' || iterator > 'z') {
                 throw new IllegalArgumentException("El segundo string debe contener solo letras del alfabeto en minúscula.");
             }
 
             // Verificar si la letra ya ha sido encontrada
-            int index = current - 'a';
-            if (!alphabet[index]) {
-                alphabet[index] = true; //  letra encontrada
+            int indice = iterator - 'a';
+            if (!alfabeto[indice]) {
+                alfabeto[indice] = true; //  letra encontrada
                 uniqueLetters++; // Aumentar el contador
             }
         }
@@ -90,16 +90,15 @@ public class StringGames {
 
         // Reordenar str1 según el orden de str2
         for (int i = 0; i < str2.length(); i++) {
-            char current = str2.charAt(i);
+            char iterator = str2.charAt(i);
             for (int j = 0; j < str1.length(); j++) {
-                if (str1.charAt(j) == current) {
-                    result.append(current);
+                if (str1.charAt(j) == iterator) {
+                    result.append(iterator);
                 }
             }
         }
 
         return result.toString();
     }
-
 
 }

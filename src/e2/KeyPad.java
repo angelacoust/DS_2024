@@ -1,10 +1,11 @@
 package e2;
+
 import java.util.Arrays;
 
 public class KeyPad {
-    private char[][] matriz;
-    private int filas;
-    private int columnas;
+    private final char[][] matriz;
+    private final int filas;
+    private final int columnas;
 
     public KeyPad(char[][] matriz) {
         this.matriz = matriz;
@@ -12,52 +13,52 @@ public class KeyPad {
         this.columnas = matriz[0].length;
     }
 
-
     public static boolean isValidKeyPad(char[][] matriz) {
-        // Verificar si la matriz es null
+        // Verificar si la matriz es vacía, nula o tiene filas vacías
         if (matriz == null) return false;
-
-        // Verificar si la matriz es vacía o tiene filas vacías
         if (matriz.length == 0 || matriz[0].length == 0) return false;
 
         int numFilas = matriz.length;
         int numColumnas = matriz[0].length;
 
-        // Verificar que todas las filas tengan la misma longitud
-        for (char[] fila : matriz) if (fila == null || fila.length != numColumnas) return false;
+        // Mirar que todas las filas tengan la misma longitud
+        for (char[] fila : matriz) {
+            if (fila == null || fila.length != numColumnas) return false;
+        }
 
         boolean filasOrdenadas = true;
         boolean columnasOrdenadas = true;
 
-        // Verificar que los caracteres de cada fila estén en orden ascendente
-        for (int i = 0; i < numFilas; i++) {
+        // Filas ordenadas ascendente
+        for (char[] chars : matriz) {
             for (int j = 1; j < numColumnas; j++) {
-                // Verificar que cada carácter sea un dígito o una letra
-                if (!Character.isDigit(matriz[i][j]) && !Character.isLetter(matriz[i][j])) return false;
+                // Verificar que los caracteres sean dígito o letra
+                if (!Character.isDigit(chars[j]) && !Character.isLetter(chars[j])) return false;
 
-                // Verificar si las filas están ordenadas
-                if (matriz[i][j] <= matriz[i][j - 1]) {
+                // Miramos si las filas están ordenadas
+                if (chars[j] <= chars[j - 1]) {
                     filasOrdenadas = false;
                 }
             }
         }
 
-        // Verificar que los caracteres de cada columna estén en orden ascendente
+        // Columnas ordenadas ascendente
         for (int j = 0; j < numColumnas; j++) {
             for (int i = 1; i < numFilas; i++) {
-                // Verificar si las columnas están ordenadas
+                // Miramos si las columnas están ordenadas
                 if (matriz[i][j] <= matriz[i - 1][j]) {
                     columnasOrdenadas = false;
+                    break;
                 }
             }
         }
 
-        // Verificar si hay duplicados
+        // Guardamos en allChars todos los caracteres
         char[] allChars = new char[numFilas * numColumnas];
         int index = 0;
-        for (int i = 0; i < numFilas; i++) {
+        for (char[] chars : matriz) {
             for (int j = 0; j < numColumnas; j++) {
-                allChars[index++] = matriz[i][j];
+                allChars[index++] = chars[j];
             }
         }
 
@@ -71,13 +72,12 @@ public class KeyPad {
         return filasOrdenadas || columnasOrdenadas;
     }
 
-
-
     public static boolean areValidMovements(String[] movimientos) {
         if (movimientos == null) return false;
         for (String movimiento : movimientos) {
-            if (movimiento == null || movimiento.isEmpty()) return false;
-            if (!movimiento.matches("[UDLR]*")) return false;
+            if (movimiento == null || movimiento.isEmpty() || !movimiento.matches("[UDLR]*")) {
+                return false;
+            }
         }
         return true;
     }
@@ -91,54 +91,63 @@ public class KeyPad {
         }
 
         KeyPad keyPad = new KeyPad(teclado);
-        MovimientoSecuencia movimientoSecuencia = keyPad.new MovimientoSecuencia(keyPad);
+        StringBuilder code = new StringBuilder();
 
-        StringBuilder codigo = new StringBuilder();
+        int filaActual = 0;
+        int columnaActual = 0;
+
         for (String movimiento : movimientos) {
-            codigo.append(movimientoSecuencia.calculateKey(movimiento));
-        }
-        return codigo.toString();
-    }
-
-    public class MovimientoSecuencia {
-        private KeyPad teclado;
-        private int filaActual;
-        private int columnaActual;
-
-        public MovimientoSecuencia(KeyPad teclado) {
-            this.teclado = teclado;
-            this.filaActual = 0; // Inicialización a una posición válida para el primer movimiento
-            this.columnaActual = 0;
-        }
-
-        public String calculateKey(String movimiento) {
-            StringBuilder clave = new StringBuilder();
-            if (!areValidMovements(new String[]{movimiento})) {
-                throw new IllegalArgumentException("Secuencia de movimientos inválida.");
-            }
-
-            // Mantener el estado de filaActual y columnaActual entre movimientos
-            for (char direccion : movimiento.toCharArray()) {
-                switch (direccion) {
+            code.append(calculateKey(movimiento, keyPad, filaActual, columnaActual));
+            // Actualizar la posición después de cada movimiento
+            for (char direction : movimiento.toCharArray()) {
+                switch (direction) {
                     case 'U':
                         if (filaActual > 0) filaActual--;
                         break;
                     case 'D':
-                        if (filaActual < teclado.getFilas() - 1) filaActual++;
+                        if (filaActual < keyPad.getFilas() - 1) filaActual++;
                         break;
                     case 'L':
                         if (columnaActual > 0) columnaActual--;
                         break;
                     case 'R':
-                        if (columnaActual < teclado.getColumnas() - 1) columnaActual++;
+                        if (columnaActual < keyPad.getColumnas() - 1) columnaActual++;
                         break;
                     default:
                         throw new IllegalArgumentException("Dirección de movimiento inválida.");
                 }
             }
-            clave.append(teclado.obtenerCaracter(filaActual, columnaActual));
-            return clave.toString();
         }
+        return code.toString();
+    }
+
+    private static String calculateKey(String movimiento, KeyPad teclado, int filaActual, int columnaActual) {
+        StringBuilder clave = new StringBuilder();
+        if (!areValidMovements(new String[]{movimiento})) {
+            throw new IllegalArgumentException("Secuencia de movimientos inválida.");
+        }
+
+        // Mantener el estado de filaActual y columnaActual entre movimientos
+        for (char direction : movimiento.toCharArray()) {
+            switch (direction) {
+                case 'U':
+                    if (filaActual > 0) filaActual--;
+                    break;
+                case 'D':
+                    if (filaActual < teclado.getFilas() - 1) filaActual++;
+                    break;
+                case 'L':
+                    if (columnaActual > 0) columnaActual--;
+                    break;
+                case 'R':
+                    if (columnaActual < teclado.getColumnas() - 1) columnaActual++;
+                    break;
+                default:
+                    throw new IllegalArgumentException("Dirección de movimiento inválida.");
+            }
+        }
+        clave.append(teclado.obtenerCharacter(filaActual, columnaActual));
+        return clave.toString();
     }
 
     public int getFilas() {
@@ -149,7 +158,7 @@ public class KeyPad {
         return columnas;
     }
 
-    public char obtenerCaracter(int fila, int columna) {
+    public char obtenerCharacter(int fila, int columna) {
         if (fila >= 0 && fila < filas && columna >= 0 && columna < columnas) {
             return matriz[fila][columna];
         }
