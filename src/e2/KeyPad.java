@@ -1,6 +1,5 @@
 package e2;
 import java.util.Arrays;
-import java.util.HashSet;
 
 public class KeyPad {
     private char[][] matriz;
@@ -14,8 +13,6 @@ public class KeyPad {
     }
 
 
-
-
     public static boolean isValidKeyPad(char[][] matriz) {
         // Verificar si la matriz es null
         if (matriz == null) return false;
@@ -27,9 +24,7 @@ public class KeyPad {
         int numColumnas = matriz[0].length;
 
         // Verificar que todas las filas tengan la misma longitud
-        for (char[] fila : matriz) {
-            if (fila == null || fila.length != numColumnas) return false;
-        }
+        for (char[] fila : matriz) if (fila == null || fila.length != numColumnas) return false;
 
         boolean filasOrdenadas = true;
         boolean columnasOrdenadas = true;

@@ -8,7 +8,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class EuroCoinCollectionTest {
 
     private EuroCoinCollection collection;
-    private EuroCoin coin1, coin2, coin3, duplicateCoin, coin4, coin5;
+    private EuroCoin coin1, coin2, coin3, duplicateCoin1, coin4, coin5,duplicateCoin2;
 
     @BeforeEach
     void setUp() {
@@ -18,7 +18,8 @@ class EuroCoinCollectionTest {
         coin1 = new EuroCoin(200, CoinColor.GOLD, EuroCountry.SPAIN, "Felipe VI", 2022);
         coin2 = new EuroCoin(50, CoinColor.BRONZE, EuroCountry.FRANCE, "Marianne", 2021);
         coin3 = new EuroCoin(100, CoinColor.GOLD_SILVER, EuroCountry.GERMANY, "Eagle", 2019);
-        duplicateCoin = new EuroCoin(200, CoinColor.GOLD, EuroCountry.SPAIN, "Felipe VI", 2021); // Mismo diseño y país que coin1
+        duplicateCoin1 = new EuroCoin(200, CoinColor.GOLD, EuroCountry.SPAIN, "Felipe VI", 2021); // Mismo diseño y país que coin1
+        duplicateCoin2 = new EuroCoin(50, CoinColor.BRONZE, EuroCountry.FRANCE, "Marianne", 2021); // Mismo diseño y país que coin1
         coin4 = new EuroCoin(50, CoinColor.BRONZE, EuroCountry.ITALY, "Dante", 2020);
         coin5 = new EuroCoin(500, CoinColor.GOLD, EuroCountry.NETHERLANDS, "Rembrandt", 2018);
     }
@@ -34,8 +35,11 @@ class EuroCoinCollectionTest {
     @Test
     void testAddDuplicateCoin() {
         collection.addCoin(coin1);
-        assertFalse(collection.addCoin(duplicateCoin), "Duplicate coin should not be added");
+        assertFalse(collection.addCoin(duplicateCoin1), "Duplicate coin should not be added");
         assertEquals(1, collection.countCoins(), "Collection should still have 1 coin");
+        collection.addCoin(coin2);
+        assertFalse(collection.addCoin(duplicateCoin2), "Duplicate coin should not be added");
+        assertEquals(2, collection.countCoins(), "Collection should still have 2 coin");
     }
 
     @Test
@@ -60,7 +64,7 @@ class EuroCoinCollectionTest {
         collection.addCoin(coin1);
         collection.addCoin(coin2);
         assertEquals(2, collection.countCoins(), "Collection should have 2 coins");
-        collection.addCoin(duplicateCoin); // Should not add duplicate
+        collection.addCoin(duplicateCoin1); // Should not add duplicate
         assertEquals(2, collection.countCoins(), "Collection should still have 2 coins after trying to add a duplicate");
     }
 
@@ -71,7 +75,7 @@ class EuroCoinCollectionTest {
         collection.addCoin(coin3); // 100 cents
         collection.addCoin(coin4); // 50 cents
         assertEquals(400, collection.getTotalValue(), "Total value should be 400 cents (200 + 50 + 100 + 50)");
-        collection.addCoin(duplicateCoin); // Should not affect total
+        collection.addCoin(duplicateCoin1); // Should not affect total
         assertEquals(400, collection.getTotalValue(), "Total value should remain 400 cents after trying to add a duplicate");
     }
 
