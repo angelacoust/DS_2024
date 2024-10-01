@@ -24,12 +24,12 @@ public class Ad {
         this.priceInEuros = other.priceInEuros;
     }
 
-    // Método para comparar propiedades entre anuncios
+    // Comparar propiedades entre anuncios
     public boolean isPropertyEqual(Ad other) {
         return this.property.equals(other.property);
     }
 
-    // Verificación de precio razonable basado en el tipo de anuncio
+    // Verifica el precio razonable basado en el anuncio
     public boolean isPriceNormal() {
         if (adType == AdType.PURCHASE) {
             return priceInEuros > 100000;  // Precio mínimo para compra
@@ -48,7 +48,7 @@ public class Ad {
         return priceInEuros / meters;
     }
 
-    // Método para bajar el precio en un porcentaje
+    // Bajar el precio en un porcentaje
     public void dropPrice(double percentage) {
         if (percentage < 0 || percentage > 100) {
             throw new IllegalArgumentException("El porcentaje debe estar entre 0 y 100.");
@@ -77,15 +77,6 @@ public class Ad {
     @Override
     public int hashCode() {
         return Objects.hash(agency, property, adType, priceInEuros);
-    }
-
-    // Método toString opcional si deseas mostrar la información del anuncio
-    @Override
-    public String toString() {
-        return "Agency: " + agency + "\n" +
-                "Property: " + property + "\n" +
-                "Ad Type: " + adType + "\n" +
-                "Price: " + priceInEuros + " euros";
     }
 }
 

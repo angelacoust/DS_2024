@@ -12,20 +12,20 @@ public class EuroCoinCollection {
 
     // Añadir una moneda a la colección (si no está repetida)
     public boolean addCoin(EuroCoin coin) {
-        return coins.add(coin); // Retorna false si ya estaba
+        return coins.add(coin);
     }
 
-    // Borrar una moneda de la colección
+    // Borrar una moneda
     public boolean removeCoin(EuroCoin coin) {
         return coins.remove(coin);
     }
 
-    // Contar las monedas de la colección
+    // Contar las monedas
     public int countCoins() {
         return coins.size();
     }
 
-    // Calcular el valor nominal total de las monedas en céntimos
+    // Calcular el valor total de las monedas en céntimos
     public int getTotalValue() {
         return coins.stream().mapToInt(EuroCoin::valueInCents).sum();
     }

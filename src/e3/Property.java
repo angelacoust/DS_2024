@@ -3,13 +3,13 @@ package e3;
 import java.util.Objects;
 
 public class Property {
-    private PropertyType type;
-    private String cadaster;
-    private String address;
-    private String postalCode;
-    private int meters;
-    private int rooms;
-    private int bathrooms;
+    private final PropertyType type;
+    private final String cadaster;
+    private final String address;
+    private final String postalCode;
+    private final int meters;
+    private final int rooms;
+    private final int bathrooms;
 
     public Property(PropertyType type, String cadaster, String address, String postalCode, int meters, int rooms, int bathrooms) {
         this.type = type;
@@ -36,7 +36,7 @@ public class Property {
         return Objects.hash(cadaster);
     }
 
-    // Metodo toString para que coincida con la prueba
+    // sobreescribir toString para imprimir
     @Override
     public String toString() {
         return type + "\n" +
@@ -46,10 +46,6 @@ public class Property {
                 meters + " meters, " + rooms + " rooms, " + bathrooms + " bathrooms\n";
     }
 
-    // Getters si es necesario.
-    public String getCadaster() {
-        return cadaster;
-    }
 
     public int getMeters() {
         return meters;

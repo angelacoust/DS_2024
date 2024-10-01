@@ -4,7 +4,7 @@ import java.util.Objects;
 
 public record EuroCoin(int valueInCents, CoinColor color, EuroCountry country, String design, int year) {
 
-    // Se mantiene la implementación de equals y hashCode para ignorar el año
+    // equals y hashCode para ignorar el año
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

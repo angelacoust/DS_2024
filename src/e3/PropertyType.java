@@ -6,7 +6,7 @@ public enum PropertyType {
 
     private final String description;
 
-    // Constructor privado para el enum
+    // Constructor
     PropertyType(String description) {
         this.description = description;
     }

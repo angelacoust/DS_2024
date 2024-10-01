@@ -3,8 +3,7 @@ package e1;
 public class StringGames {
 
     public static String bestCharacters(String str1, String str2) {
-        int str1Minus = 0, str1High = 0, str1Digito = 0;
-        int str2Minus = 0, str2High = 0, str2Digito = 0;
+        int str1Minus = 0, str1High = 0, str1Digito = 0, str2Minus = 0, str2High = 0, str2Digito = 0, str1Ganador = 0, str2Ganador = 0;
 
         if (str1.length() != str2.length()) {
             throw new IllegalArgumentException("Los strings deben tener la misma longitud.");
@@ -26,8 +25,6 @@ public class StringGames {
             if (Character.isDigit(c2)) str2Digito++;
         }
 
-        // Contamos las categorías
-        int str1Ganador = 0, str2Ganador = 0;
 
         if (str1Minus > str2Minus) str1Ganador++; else if (str1Minus < str2Minus) str2Ganador++;
         if (str1High > str2High) str1Ganador++; else if (str1High < str2High) str2Ganador++;

@@ -6,7 +6,7 @@ public enum AdType {
 
     private final String description;
 
-    // Constructor privado para el enum
+    // Constructor
     AdType(String description) {
         this.description = description;
     }

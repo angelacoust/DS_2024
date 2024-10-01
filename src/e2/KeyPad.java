@@ -14,20 +14,17 @@ public class KeyPad {
     }
 
     public static boolean isValidKeyPad(char[][] matriz) {
+        boolean filasOrdenadas = true, columnasOrdenadas = true;
         // Verificar si la matriz es vacía, nula o tiene filas vacías
         if (matriz == null) return false;
         if (matriz.length == 0 || matriz[0].length == 0) return false;
 
-        int numFilas = matriz.length;
-        int numColumnas = matriz[0].length;
+        int numFilas = matriz.length, numColumnas = matriz[0].length;
 
         // Mirar que todas las filas tengan la misma longitud
         for (char[] fila : matriz) {
             if (fila == null || fila.length != numColumnas) return false;
         }
-
-        boolean filasOrdenadas = true;
-        boolean columnasOrdenadas = true;
 
         // Filas ordenadas ascendente
         for (char[] chars : matriz) {
@@ -83,6 +80,10 @@ public class KeyPad {
     }
 
     public static String obtainCode(char[][] teclado, String[] movimientos) {
+        KeyPad keyPad = new KeyPad(teclado);
+        StringBuilder code = new StringBuilder();
+        int filaActual = 0, columnaActual = 0;
+
         if (!isValidKeyPad(teclado)) {
             throw new IllegalArgumentException("Teclado no válido.");
         }
@@ -90,11 +91,7 @@ public class KeyPad {
             throw new IllegalArgumentException("Movimientos no válidos.");
         }
 
-        KeyPad keyPad = new KeyPad(teclado);
-        StringBuilder code = new StringBuilder();
 
-        int filaActual = 0;
-        int columnaActual = 0;
 
         for (String movimiento : movimientos) {
             code.append(calculateKey(movimiento, keyPad, filaActual, columnaActual));
@@ -124,7 +121,7 @@ public class KeyPad {
     private static String calculateKey(String movimiento, KeyPad teclado, int filaActual, int columnaActual) {
         StringBuilder clave = new StringBuilder();
         if (!areValidMovements(new String[]{movimiento})) {
-            throw new IllegalArgumentException("Secuencia de movimientos inválida.");
+            throw new IllegalArgumentException("Movimientos inválidos.");
         }
 
         // Mantener el estado de filaActual y columnaActual entre movimientos
@@ -143,7 +140,7 @@ public class KeyPad {
                     if (columnaActual < teclado.getColumnas() - 1) columnaActual++;
                     break;
                 default:
-                    throw new IllegalArgumentException("Dirección de movimiento inválida.");
+                    throw new IllegalArgumentException("Dirección inválida.");
             }
         }
         clave.append(teclado.obtenerCharacter(filaActual, columnaActual));
